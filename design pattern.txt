@@ -1,0 +1,51 @@
+class Observer {
+    update(data) {
+        // To be implemented by concrete observers
+    }
+}
+
+// Concrete Observer
+class Display extends Observer {
+    update(data) {
+        console.log(`Display updated with data: ${data}`);
+    }
+}
+
+// Subject interface
+class Subject {
+    constructor() {
+        this._observers = [];
+    }
+
+    addObserver(observer) {
+        this._observers.push(observer);
+    }
+
+    removeObserver(observer) {
+        this._observers = this._observers.filter(obs => obs !== observer);
+    }
+
+    notifyObservers(data) {
+        this._observers.forEach(observer => observer.update(data));
+    }
+}
+
+// Concrete Subject
+class WeatherMonitoringSystem extends Subject {
+    constructor() {
+        super();
+        this._weatherData = null;
+    }
+
+    setWeatherData(data) {
+        this._weatherData = data;
+        this.notifyObservers(data);
+    }
+}
+
+// Usage
+const weatherSystem = new WeatherMonitoringSystem();
+const display = new Display();
+
+weatherSystem.addObserver(display);
+weatherSystem.setWeatherData("Temperature: 22°C, Humidity: 60%");
